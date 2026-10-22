@@ -1,0 +1,6 @@
+{
+  "workspace": "~/fm_workspace",
+  "users_file": "users.json",
+  "quota_mb": 5,
+  "encoding": "utf-8"
+}

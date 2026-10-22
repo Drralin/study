@@ -1,0 +1,2 @@
+class FMError(Exception):
+    pass
