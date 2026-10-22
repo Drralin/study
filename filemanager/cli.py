@@ -1,7 +1,10 @@
+import re
 import shlex
 
 from .errors import FMError
 from .operations import fmt_size
+
+TEXT_CMD = re.compile(r'^\s*(fwrite|fadd)\s+("[^"]+"|\S+)\s+(.*)$', re.IGNORECASE)
 
 HELP = [
     ("Папки", [
@@ -62,6 +65,17 @@ class CommandLine:
         print("До свидания!")
 
     def execute(self, line):
+        match = TEXT_CMD.match(line)
+        if match:
+            name, target, text = match.groups()
+            target = target[1:-1] if target.startswith('"') else target
+            try:
+                self.commands[name.lower()][1](target, text)
+            except FMError as e:
+                print(f"Ошибка: {e}")
+            except OSError as e:
+                print(f"Ошибка ОС: {e.strerror}")
+            return
         try:
             args = shlex.split(line)
         except ValueError as e:
